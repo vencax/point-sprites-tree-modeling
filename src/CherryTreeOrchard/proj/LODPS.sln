@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LODPS", "LODPS.vcproj", "{DF550E93-9DA9-48E3-A123-428936316FFF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{DF550E93-9DA9-48E3-A123-428936316FFF}.Debug.ActiveCfg = Debug|Win32
+		{DF550E93-9DA9-48E3-A123-428936316FFF}.Debug.Build.0 = Debug|Win32
+		{DF550E93-9DA9-48E3-A123-428936316FFF}.Release.ActiveCfg = Release|Win32
+		{DF550E93-9DA9-48E3-A123-428936316FFF}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

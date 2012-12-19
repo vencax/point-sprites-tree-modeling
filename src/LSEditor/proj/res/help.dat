@@ -1,0 +1,62 @@
+	Program slouí k editaci gramatik, které se pouívají ke generovaní pøírodních objektù jako jsou napøíklad stromy, keøe, apod. Je zaloen na architektuøe SDI aplikace. To znamená, e obsahuje jeden dokument, kterı pøeívá po celou dobu bìhu. Obsahuje standardní ovládací prvky SDI aplikace jako jsou Otevøít, Uloit, Nápovìda… 
+	Dalšími prvky je ovládací panel v levé èásti okna programu. Pravá èást je okno pro vizualizaci LSystemu. Po stlaèení tlaèítka Otevøít se otevøe standardní dialog, kterı vyzve k vybrání souboru, kterı obsahuje LSystem. Po jeho potvrzení se LSystem naète a rovnou zobrazí ve vizualizaèní èásti. Dále se naètou i hodnoty z otevíraného souboru do ovládacího panelu nalevo. Uivatel má nyní monost mìnit tyto hodnoty. V pøípadì posouvání trackbarù, kterımi se ovládá úroveò rekurze, poèáteèní úhel a poèáteèní tlouška se zmìny projevují ihned. V pøípadì editace axiomu nebo pravidel v editboxech se zmìny projeví po stisku tlaèítka Apply Changes.
+	Dále má uivatel monost vybrat jaké textury budou aplikovány na jednotlivé point sprity( listy, cele vetsi casti rostliny). Pøíslušnı dialog se zobrazí po stisku tlaèítka Load Textures. Na nìm se zobrazí defaultní textury. Po kliknutí do jakéhokoli políèka s texturou se objeví standardní Open Dialog kterım uivatel vybere novı soubor s texturou. Po stisku tlaèítka OK se zmìny projeví. V opaèném pøípadì, po stisku, Cancel, nikoliv. 
+	Dále má uivatel monost otáèet a proplouvat scénou ve vizualizaèním oknì ( flyby mód), aby mohl pozorovat zmìny své editace. Uèiní tak stiskem klávesy mezerník, avšak je nutné, aby vizualizaèní okno mìlo focus. Pohyb se pak dìje v duchu First Person kamery. Tj. pomocí myši se otáèí a klávesnicí se létá. W vpøed, S vzad, A vlevo, D vpravo. Flyby mód se ukonèí opìtovnım stiskem klavesy mezerník.
+
+LSystem:
+--------
+	LSystem je gramatika pouzivana pro generovani prirodnich objektu( PO) jako stromy, kere apod. Je slozena z axiomu a pøepisovacích pravidel. Jak axiom tam prepisovaci pravidla jsou slozena ze znaku dvou druhu: terminaly a neterminaly. Terminaly jsou znaky, které se jiz dále neprepisuji. Zatímco neterminaly se prepisuji. Prepisovani je proces, kterı projde všechny znaky dosavadne vygenerovaného retezce( DVR). Pokud narazi na neterminal, vyhleda pravidlo v mnoinì pøepisovacích pravidel tvaru:
+<NETERMINAL( leva strana)> = <to, v co se prepise( prava strana)>
+které ho ma na leve strane a nahradi ho pravou stranou. 
+
+Struktura souboru LSystemu:
+---------------------------
+
+Soubor s LSystemem ma definovany obsah a obsahuje mimo axiom a sadu pøepisovacích pravidel i další pomocne parametry. Pøípona souboru s LSystemem je LS. Krome komentaru, ktre jsou uvozeny znakem # a konci na konci radku, obsahuje polozky v tomto poradi:
+Recursion level – cislo v intervalu <1, infinity). Je to poèet prepisovani. Samozrejme cim je vyssi, tim je PO slozitejsi a pomaleji se vykresluje.
+Default angle – cislo z <0, 360). Pocatecni uhel, kterı je pouzit pro rotace o nespecifikovany uhel
+Default thickness – pocatecni ‚tloustka‘ useku PO. 
+Axiom – pocatecni øetìzec kterı se prepisuje
+Rules – sada pøepisovacích pravidel. Format X=Y, kde x je prava strana, Y leva. Kazde je na vlastnim radku.
+@ - ukoncuje seznam pravidel. Pøi editaci v programu je potreba také! Jinak nacitani zkonci chybou.
+	V souboru se nesmi vyskytovat zadne mezery( s vyjimkou komentaru, které se ignoruji), tzn. zadne pravidla tvaru X = Y nebo jakkoli odsazene hodnoty Recursion Level ani jiného atributu. 
+Dále se nesmi vyskytovat prazne radky. Pro vizuální oddìleni je tøeba prazdny radek zakomentovat znakem #. Pøi ulozeni souboru LS pomoci programu se komentaze zanedbávají a ukladaji pouze nutne, popisující co která radka znamena.
+
+Editace LS v programu:
+----------------------
+
+Vlastnosti Recursion level, Default Angle i Thickness se nactou jako hodnoty do SlideBaru a mohou se menit jejich posunovanim. Zmeny se projevi ihned. Axiom se meni v prislusnem EditBoxu. Stejne tak pravidla. U pravidel je tøeba nezapomenout na znak @ ukoncujici posloupnost pravidel! Pro projeveni zmen axiomu a pravidel je tøeba stisknout tlaèítko Apply. Dále editacni panel obsahuje zaskrtavaci boxy: WireFillMode – zapina nebo vypina drateny model, EnableLighting zapina( vypina) mod vykreslovani se svetly.
+
+Vyznam terminálních znaku v LSystemu:
+-------------------------------------
+
+Terminální znaky jsou vlastne prikazy pro 'zelvicku' = kreslici entitu, která na jejich zaklade kresli vysledny øetìzec vygenerovany gramatikou LSystemu. elvièka zacina v pocatku soustavy souradnic smerujici vzhuru( v kladnem smeru osy Y( oznacena zelene), X cervena, Z modra( analogie RGB))).
+
+Seznam prikazu:
+--------------------
+
+F – kresli usek v aktuálním smeru zelvicky
+f – posunese o delku useku v aktuálním smeru, ale nekresli 
+[ - ulozi aktuální stav elvièky na zásobník
+] – vezme vrchol zásobníku a udela z nej aktuální stav elvièky
+& - zmìna smeru smerem dolu o defaultAngle kolem osy X( 'sklopeni hlavy'), *
+^ - to same nahoru( 'zdvihnuti hlavy'), *
++ - zmìna smeru smerem doleva o defaultAngle kolem osy Y( 'otoceni hlavy vlevo'), *
+- - to same vpravo, *
+< - zmìna otoceni smerem doleva o defaultAngle kolem osy Z( 'naklopeni hlavy vlevo'), *
+> - to same vpravo, *
+| - otoceni o 180 stupnu kolem osy Y( 'otoceni hlavy o 180')
+% - to same kolem osy Z( 'protoceni hlavy o 180')
+$ - otoceni do roviny( 'protoceni hlavy do roviny = uhel 0 stupnu')
+~ - otoceni ve všech osach o nahodny uhel, *
+L – zaznamenani noveho PointSpritu
+" – zvıšeni delky useku o 10%, *
+' -  snizeni delky useku o 10%, *
+; - zvıšeni defaultAngle o 10%, *
+: - snizeni defaultAngle o 10%, *
+? - zvıšeni defaultThickness o 30%, *
+! -  snizeni defaultThickness o 30%, *
+--------------------------------
+Všechny prikazy oznaèené * je mozne rozsirit o aplikaci jine nez defaultni hodnoty. A to pouitím nove hodnoty zapsane jako realne cislo v zavorkach opet vse bez mezer ihned za prikaz. Napr. +(67) = zmìna smeru kolem osy Y doprava o uhel 67 stupnu. Nebo: '(.4) -  snizeni delky useku o 60%( vynasobeni hodnotou 0.4). Pro zapis reálnıch cisel jejichz cela èást je 0 lze 0 vynechat. Napr. 0.45 -> .45 .
+
+EnJoy
